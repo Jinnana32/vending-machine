@@ -1,0 +1,16 @@
+{
+  "name": "vm.js",
+  "version": "1.0.0",
+  "description": "Core vm module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tj coyoca",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "27.5.1",
+    "jest": "28.1.0",
+    "ts-jest": "28.0.3"
+  }
+}
