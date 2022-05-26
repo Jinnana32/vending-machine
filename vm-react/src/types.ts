@@ -2,20 +2,24 @@ import { Coin } from "../../vm-js/src";
 import { VendingProduct } from "../../vm-js/src/types";
 
 export interface ICoinSlot {
-  dollar: number;
-  setDollar: (dollar: number) => void;
-  cent: number;
-  setCent: (cent: number) => void;
-  insertCoin: () => void;
+  label: string;
+  amount: number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
+  inputDisabled: boolean;
+  buttonDisabled: boolean;
 }
 
 export interface IChangeStash {
   changeStash: Coin;
+  collectDisabled: boolean;
   collectStash: () => void;
 }
 
 export interface IProductShelf {
   coinStash: Coin;
-  products: VendingProduct[];
+  products: VendingProduct[] | null | undefined;
+  productStash: VendingProduct | null;
+  pickSnack: () => void;
   onVendProduct: (product: VendingProduct) => void;
 }
