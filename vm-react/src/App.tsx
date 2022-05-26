@@ -40,9 +40,10 @@ function App() {
   return (
     <div className="w-4/6 mx-auto mt-24 p-10 border border-gray-300 rounded">
       <h3 className="text-center mb-2 text-2xl">Vending Machine</h3>
-      <p className="text-center text-gray-600 text-sm mb-5">
+      <p className="text-center text-gray-600 text-sm">
         {vendingInstruction && vendingInstruction}
       </p>
+      <div className="text-center mb-5"><small className="text-gray-500">Note: every time you insert an incorrect amount, it is being refunded on the change stash.</small></div>
       <div className="flex">
         <div className="w-96">
           <CoinSlot
