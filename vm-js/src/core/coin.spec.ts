@@ -5,7 +5,7 @@ describe("Coin", () => {
     let coins = ["$1", "50c"];
     let expected = [
       { amount: 100, stringValue: "$1.00" },
-      { amount: 50, stringValue: "$0.50" },
+      { amount: 50, stringValue: "50c" },
     ];
     coins.forEach((coin, index) => {
       let newCoin = new Coin(coin);

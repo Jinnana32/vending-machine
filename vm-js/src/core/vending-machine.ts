@@ -3,6 +3,7 @@ import { Coin } from "./coin";
 export class VendingMachine {
   private products: VendingProduct[];
   private changeStash: number;
+  private productStash: VendingProduct | null;
   public coinStash: Coin;
 
   /**
@@ -22,18 +23,20 @@ export class VendingMachine {
     });
     this.coinStash = new Coin();
     this.changeStash = 0;
+    this.productStash = null;
   }
 
   public insertCoin(coin: Coin): void {
     // check if coin exist in the denoms
     if (!this.isInDenoms(coin)) {
-      throw new Error("Please insert coin in the denominations.");
+      this.addToChangeStash(coin.amount);
+      throw new Error("Please insert coin in the given denominations.");
     }
 
     this.coinStash.add(coin.amount);
   }
 
-  public vend(selectedProduct: string): void {
+  public vend(selectedProduct: string): VendingProduct {
     let product = this.products.find(
       (product) => product.label.toLowerCase() === selectedProduct.toLowerCase()
     );
@@ -46,9 +49,12 @@ export class VendingMachine {
       throw new Error("You have insufficient funds.");
     }
 
+    this.productStash = product;
     let coinChange = this.coinStash.amount - product.price;
     this.coinStash = new Coin();
-    this.changeStash += coinChange;
+    this.addToChangeStash(coinChange);
+
+    return product;
   }
 
   public collectChange(): Coin {
@@ -62,8 +68,16 @@ export class VendingMachine {
   }
 
   public cancelTransaction() {
-    this.changeStash += this.coinStash.amount;
+    this.addToChangeStash(this.coinStash.amount);
     this.coinStash = new Coin();
+  }
+
+  public pickUpProduct() {
+    this.productStash = null;
+  }
+
+  private addToChangeStash(amount: number) {
+    this.changeStash += amount;
   }
 
   get getVendingInstructions(): string {
