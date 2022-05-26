@@ -1,8 +1,8 @@
 import { VendingProduct } from "../types";
 import { Coin } from "./coin";
 export class VendingMachine {
-  public coins: Coin;
-  public refundedCoins: number;
+  public coinStash: Coin;
+  public changeCollector: number;
 
   /**
    * @param products - products to be displayed in the vending machine
@@ -15,15 +15,49 @@ export class VendingMachine {
    * eg. ($1 -> 100, $2 -> 200, 50c -> 50)
    */
   constructor(public products: VendingProduct[], public denoms: number[]) {
-    this.coins = new Coin();
-    this.refundedCoins = 0;
+    this.coinStash = new Coin();
+    this.changeCollector = 0;
   }
 
-  public insertCoin(rawCoin: string): void {
+  public insertCoin(rawCoin: Coin): void {
     // check if coin exist in the denoms
-    // coin should start with $ or end with c
-    // coin should be a whole number
-    let coin = new Coin(rawCoin);
-    this.coins.add(coin.amount);
+    if (!this.isInDenoms(rawCoin)) {
+      throw new Error("Please insert coin in the denominations.");
+    }
+
+    this.coinStash.add(rawCoin.amount);
+  }
+
+  public vend(selectedProduct: string): void {
+    let product = this.products.find(
+      (product) => product.label.toLowerCase() === selectedProduct.toLowerCase()
+    );
+
+    if (!product) {
+      throw new Error("Please select a product that is within the menu.");
+    }
+
+    if (product.price > this.coinStash.amount) {
+      throw new Error("You have insufficient funds.");
+    }
+
+    let coinChange = this.coinStash.amount - product.price;
+    this.coinStash = new Coin();
+    this.changeCollector += coinChange;
+  }
+
+  public collectChange() : Coin {
+    let change: Coin = new Coin(this.changeCollector);
+    this.changeCollector = 0;
+    return change;
+  }
+
+  public isInDenoms(coin: Coin): boolean {
+    return this.denoms.indexOf(coin.amount) !== -1;
+  }
+
+  public cancelTransaction() {
+    this.changeCollector = this.coinStash.amount;
+    this.coinStash = new Coin();
   }
 }
