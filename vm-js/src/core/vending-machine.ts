@@ -1,8 +1,9 @@
 import { VendingProduct } from "../types";
 import { Coin } from "./coin";
 export class VendingMachine {
+  private products: VendingProduct[];
+  private changeStash: number;
   public coinStash: Coin;
-  public changeCollector: number;
 
   /**
    * @param products - products to be displayed in the vending machine
@@ -14,9 +15,13 @@ export class VendingMachine {
    *
    * eg. ($1 -> 100, $2 -> 200, 50c -> 50)
    */
-  constructor(public products: VendingProduct[], public denoms: number[]) {
+  constructor(rawProducts: VendingProduct[], public denoms: number[]) {
+    this.products = rawProducts.map((product) => {
+      product.coin = new Coin(product.price);
+      return product;
+    });
     this.coinStash = new Coin();
-    this.changeCollector = 0;
+    this.changeStash = 0;
   }
 
   public insertCoin(coin: Coin): void {
@@ -43,12 +48,12 @@ export class VendingMachine {
 
     let coinChange = this.coinStash.amount - product.price;
     this.coinStash = new Coin();
-    this.changeCollector += coinChange;
+    this.changeStash += coinChange;
   }
 
-  public collectChange() : Coin {
-    let change: Coin = new Coin(this.changeCollector);
-    this.changeCollector = 0;
+  public collectChange(): Coin {
+    let change: Coin = new Coin(this.changeStash);
+    this.changeStash = 0;
     return change;
   }
 
@@ -57,7 +62,23 @@ export class VendingMachine {
   }
 
   public cancelTransaction() {
-    this.changeCollector = this.coinStash.amount;
+    this.changeStash += this.coinStash.amount;
     this.coinStash = new Coin();
+  }
+
+  get getVendingInstructions(): string {
+    let denominations = this.denoms.map((denom) => {
+      let newCoin = new Coin(denom);
+      return newCoin.toString();
+    });
+    return `Please use only ${denominations.join(", ")}`;
+  }
+
+  get getProducts(): VendingProduct[] {
+    return this.products;
+  }
+
+  get getChangeStash(): Coin {
+    return new Coin(this.changeStash);
   }
 }
