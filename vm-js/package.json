@@ -1,0 +1,18 @@
+{
+  "name": "vm.js",
+  "version": "1.0.0",
+  "description": "Core vm module",
+  "main": "index.js",
+  "scripts": {
+    "cmd": "tsc && node ./dist/src/sample.js",
+    "test": "jest --coverage"
+  },
+  "author": "Tj coyoca",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "27.5.1",
+    "jest": "28.1.0",
+    "ts-jest": "28.0.3",
+    "typescript": "4.7.2"
+  }
+}
