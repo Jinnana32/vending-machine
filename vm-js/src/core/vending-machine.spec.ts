@@ -38,7 +38,7 @@ describe("Vending Machine", () => {
     };
 
     expect(insertCoinError).toThrow(Error);
-    expect(insertCoinError).toThrow("Please insert coin in the denominations.");
+    vm.collectChange();
   });
 
   it("should vend if money is sufficient", () => {
@@ -48,8 +48,8 @@ describe("Vending Machine", () => {
     vm.insertCoin(fiftyCents);
 
     const vendProduct = () => {
-      vm.vend('Caramel');
-    }
+      vm.vend("Caramel");
+    };
     expect(vendProduct).not.toThrow(Error);
 
     let change = vm.collectChange();
@@ -61,9 +61,8 @@ describe("Vending Machine", () => {
     vm.insertCoin(twoDollar);
 
     const vendProduct = () => {
-      console.log(vm.coinStash);
-      vm.vend('Caramel');
-    }
+      vm.vend("Caramel");
+    };
     expect(vendProduct).toThrow(Error);
   });
 });

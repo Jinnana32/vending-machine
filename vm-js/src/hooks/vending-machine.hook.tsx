@@ -8,7 +8,8 @@ export type VendingMachineActions =
   | "insertCoin"
   | "cancel"
   | "collect"
-  | "vend";
+  | "vend"
+  | "pickup";
 
 interface VMDispatch {
   type: VendingMachineActions;
@@ -22,9 +23,12 @@ const useVendingMachine = (
   VendingMachine | null,
   Coin,
   Coin,
+  VendingProduct | null,
   ({ type, payload }: VMDispatch) => void
 ] => {
   const [vm, setVm] = useState<VendingMachine | null>(null);
+
+  const [productStash, setProductStash] = useState<VendingProduct | null>(null);
   const [coinStash, setCoinStash] = useState<Coin>(new Coin());
   const [changeStash, setChangeStash] = useState<Coin>(new Coin());
 
@@ -40,6 +44,9 @@ const useVendingMachine = (
         break;
       case "collect":
         collectStash();
+        break;
+      case "pickup":
+        pickUpProduct();
         break;
       default:
         cancelTransaction();
@@ -68,6 +75,7 @@ const useVendingMachine = (
       setCoinStash(vm?.coinStash!);
     } catch (error) {
       console.error(`Error inserting coin: ${error}`);
+      setChangeStash(vm?.getChangeStash!);
       alert(error);
     }
   }
@@ -86,16 +94,22 @@ const useVendingMachine = (
 
   function vendProduct(product: VendingProduct) {
     try {
-      vm?.vend(product.label);
+      let vendedProduct = vm?.vend(product.label);
       setCoinStash(vm?.coinStash!);
       setChangeStash(vm?.getChangeStash!);
+      setProductStash(vendedProduct!);
     } catch (err) {
       console.error(err);
       alert(err);
     }
   }
 
-  return [vm, coinStash, changeStash, dispatch];
+  function pickUpProduct() {
+    vm?.pickUpProduct();
+    setProductStash(null);
+  }
+
+  return [vm, coinStash, changeStash, productStash, dispatch];
 };
 
 export default useVendingMachine;
