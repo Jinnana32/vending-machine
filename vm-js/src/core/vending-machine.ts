@@ -19,13 +19,13 @@ export class VendingMachine {
     this.changeCollector = 0;
   }
 
-  public insertCoin(rawCoin: Coin): void {
+  public insertCoin(coin: Coin): void {
     // check if coin exist in the denoms
-    if (!this.isInDenoms(rawCoin)) {
+    if (!this.isInDenoms(coin)) {
       throw new Error("Please insert coin in the denominations.");
     }
 
-    this.coinStash.add(rawCoin.amount);
+    this.coinStash.add(coin.amount);
   }
 
   public vend(selectedProduct: string): void {
