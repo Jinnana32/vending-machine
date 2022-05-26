@@ -48,12 +48,12 @@ const ProductShelf = ({
           })}
         </div>
         {productStash && (
-          <Alert color="green">
+          <div className="p-5 bg-green-200 mb-6 text-green-800 rounded">
             Please grab your snack: {productStash.label}
             <div onClick={pickSnack}>
               <span className="underline cursor-pointer">Pick it up</span>
             </div>
-          </Alert>
+          </div>
         )}
       </div>
     </Fragment>

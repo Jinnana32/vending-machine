@@ -4,7 +4,6 @@
   "description": "Core vm module",
   "main": "index.js",
   "scripts": {
-    "cmd": "tsc && node ./dist/src/sample.js",
     "test": "jest --coverage"
   },
   "author": "Tj coyoca",
