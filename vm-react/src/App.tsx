@@ -11,8 +11,14 @@ import productsData from "./data/products.data";
 import denomData from "./data/denom.data";
 
 function App() {
-  const [vm, coinStash, changeStash, productStash, dispatch] =
-    useVendingMachine(productsData, denomData);
+  const [
+    vendingInstruction,
+    productsDisplay,
+    coinStash,
+    changeStash,
+    productStash,
+    dispatch,
+  ] = useVendingMachine(productsData, denomData);
   const [dollar, setDollar] = useState<number>(0);
   const [cent, setCent] = useState<number>(0);
   const minCent = 0;
@@ -35,7 +41,7 @@ function App() {
     <div className="w-4/6 mx-auto mt-24 p-10 border border-gray-300 rounded">
       <h3 className="text-center mb-2 text-2xl">Vending Machine</h3>
       <p className="text-center text-gray-600 text-sm mb-5">
-        {vm && vm.getVendingInstructions}
+        {vendingInstruction && vendingInstruction}
       </p>
       <div className="flex">
         <div className="w-96">
@@ -86,7 +92,7 @@ function App() {
         </div>
         <div className="pl-5 w-full">
           <ProductShelf
-            products={vm?.getProducts}
+            products={productsDisplay}
             coinStash={coinStash}
             productStash={productStash}
             pickSnack={() => dispatch({ type: "pickup", payload: null })}

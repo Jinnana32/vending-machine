@@ -1,0 +1,3 @@
+Caramel,250
+Hazelnut,310
+Organic Raw,200

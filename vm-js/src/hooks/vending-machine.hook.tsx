@@ -20,7 +20,8 @@ const useVendingMachine = (
   products: VendingProduct[],
   denoms: number[]
 ): [
-  VendingMachine | null,
+  string,
+  VendingProduct[],
   Coin,
   Coin,
   VendingProduct | null,
@@ -28,6 +29,8 @@ const useVendingMachine = (
 ] => {
   const [vm, setVm] = useState<VendingMachine | null>(null);
 
+  const [vendingInstruction, setVendingInstruction] = useState<string>("");
+  const [productsDisplay, setProductsDisplay] = useState<VendingProduct[]>([]);
   const [productStash, setProductStash] = useState<VendingProduct | null>(null);
   const [coinStash, setCoinStash] = useState<Coin>(new Coin());
   const [changeStash, setChangeStash] = useState<Coin>(new Coin());
@@ -57,6 +60,8 @@ const useVendingMachine = (
   useEffect(() => {
     let vendingMachine = new VendingMachine(products, denoms);
     setVm(vendingMachine);
+    setVendingInstruction(vendingMachine.getVendingInstructions);
+    setProductsDisplay(vendingMachine.getProducts);
     return () => {
       setVm(null);
     };
@@ -109,7 +114,14 @@ const useVendingMachine = (
     setProductStash(null);
   }
 
-  return [vm, coinStash, changeStash, productStash, dispatch];
+  return [
+    vendingInstruction,
+    productsDisplay,
+    coinStash,
+    changeStash,
+    productStash,
+    dispatch,
+  ];
 };
 
 export default useVendingMachine;
